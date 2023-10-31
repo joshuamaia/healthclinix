@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  # healthclinic-web:
+  #   container_name: frontend
+  #   build: "./healthclinixweb"
+  #   ports:
+  #     - 4200:4200
+  #   networks:
+  #     - healthclinic-network
+
+  healthclinic-db:
+    image: postgres:16
+    container_name: "postgresql"
+    env_file:
+      - .env
+    volumes:
+      - "./data/postgres:/var/lib/postgres/data"
+    ports:
+      - 5433:5432
+    networks:
+      - healthclinic-network
+
+networks:
+  healthclinic-network:
+    name: healthclinic-network
+    driver: bridge
