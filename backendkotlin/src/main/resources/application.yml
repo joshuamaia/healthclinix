@@ -25,6 +25,16 @@ spring:
     enabled: false
     baseline-on-migrate: false
 
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: 'true'
+    defaults:
+      enabled: 'true'
+
 api:
   security:
     token:
