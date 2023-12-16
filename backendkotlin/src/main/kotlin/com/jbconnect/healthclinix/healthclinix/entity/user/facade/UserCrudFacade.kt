@@ -9,5 +9,6 @@ import org.springframework.data.domain.Pageable
 interface UserCrudFacade {
     fun save(userRequestDTO: UserRequestDTO) : UserResponseDTO
 
+    fun findOne(id: Long): UserResponseDTO
     fun getByFilters(pageable: Pageable, userRequestDTO: UserRequestDTO): Page<UserResponseDTO>
 }

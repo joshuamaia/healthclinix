@@ -29,11 +29,8 @@ public class SaveSpringDataAdapter implements SavePort<UserRequestDTO, UserRespo
     @Transactional(readOnly = false)
     public UserResponseDTO execute(UserRequestDTO userRequestDTO) {
         UserModel user = this.userMapper.userRequestToUserModel(userRequestDTO);
-        //Cryptography user password
         user.setPasswordUser(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setCreateAt(LocalDateTime.now());
-
-        //TODO - Verify why create a new ID with error when try to save
         try{
             this.userModelRepositoryr.save(user);
             return this.userMapper.userModelToUserResponseDTO(user);

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +37,8 @@ public class UserController {
 	}
 
 	@Operation(summary = "Create User")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "201", description = "User creted with sucessful", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class)) }),
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User creted with sucessful", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied", content = @Content) })
 	@PostMapping("create")
 	public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
@@ -45,8 +46,20 @@ public class UserController {
 		return new ResponseEntity<>(userSaveResponse, HttpStatus.CREATED);
 	}
 
-	@Operation(summary = "Search Users")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the List of Users", content = {
+	@Operation(summary = "Search User By id")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Found the User", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied", content = @Content) })
+	@GetMapping("/{id}")
+	@PreAuthorize("hasAnyRole('ADMIN','CLIENT')")
+	public ResponseEntity<UserResponseDTO> findOne(@PathVariable Long id) {
+		UserResponseDTO findOne = this.userCrudFacade.findOne(id);
+		return new ResponseEntity<>(findOne, HttpStatus.OK);
+	}
+
+	@Operation(summary = "Search By ID")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the User", content = {
 			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponseDTOPage.class))) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied", content = @Content) })
 	@PostMapping("get-by-filters")

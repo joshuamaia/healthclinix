@@ -12,6 +12,5 @@ public class UserRequestDTO {
     private String userName;
     private String passwordUser;
     private String email;
-    //TODO - Create UserRequestDTO only for create a new User
     private List<RoleDTO> roles;
 }
